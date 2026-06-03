@@ -207,6 +207,34 @@ function vitePluginNonBlockingStylesheets(): Plugin {
   };
 }
 
+function vitePluginStaticSpaRoutes(routes: string[]): Plugin {
+  return {
+    name: "static-spa-routes",
+    enforce: "post",
+    generateBundle(_options, bundle) {
+      const indexHtml = bundle["index.html"];
+
+      if (!indexHtml || indexHtml.type !== "asset") {
+        return;
+      }
+
+      for (const route of routes) {
+        const routePath = route.replace(/^\/+|\/+$/g, "");
+
+        if (!routePath) {
+          continue;
+        }
+
+        this.emitFile({
+          type: "asset",
+          fileName: `${routePath}/index.html`,
+          source: indexHtml.source,
+        });
+      }
+    },
+  };
+}
+
 const includeDebugPlugins =
   process.env.NODE_ENV !== "production" ||
   process.env.VITE_ENABLE_PRODUCTION_DEBUG_TOOLS === "true";
@@ -222,6 +250,7 @@ const plugins = [
       ]
     : []),
   vitePluginNonBlockingStylesheets(),
+  vitePluginStaticSpaRoutes(["/privacy", "/terms"]),
 ];
 
 export default defineConfig({

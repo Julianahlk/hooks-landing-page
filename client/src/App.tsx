@@ -51,7 +51,9 @@ function Router() {
       <Switch>
         <Route path={"/"} component={Home} />
         <Route path={"/privacy"} component={PrivacyPage} />
+        <Route path={"/privacy/"} component={PrivacyPage} />
         <Route path={"/terms"} component={TermsPage} />
+        <Route path={"/terms/"} component={TermsPage} />
         <Route path={"/faq"} component={FAQ} />
         <Route path={"/faqs"} component={FAQ} />
         <Route path={"/404"} component={NotFound} />
